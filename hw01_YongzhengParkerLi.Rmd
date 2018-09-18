@@ -1,0 +1,79 @@
+---
+title: "hw01_YongzhengParkerLi.Rmd"
+output: html_document
+---
+
+This file is for the first assignment of the course STAT545A. It aims to explore a dataset via using R Markdown.
+
+## Setting Up
+
+```{r 01}
+install.packages("cem",repos = "http://cran.us.r-project.org")
+library(cem)
+data(LL)
+data <- LL
+colnames(data)
+```
+
+This part shows the package and dataset installation process. It also gives the variable names.
+
+## Basic Data Frame Exploration
+
+```{r 02}
+re74.bar <- mean(LL$re74)
+re74.bar
+median(LL$re74)
+summary(LL$re74)
+summary(LL)
+table(LL$black)
+which.max(table(LL$education))
+table(LL$education)
+freq.education <- table(LL$education)
+which.max(freq.education)
+prop.table(table(LL$education))
+prop.table(table(LL$education))*100
+```
+
+This section explores the mean and median of one variable within a dataframe. Furthermore, it summaries statistics of all variables within a dataframe and gives different styles of count/frenquency tables.
+
+# Measures of Dispersion
+
+```{r 03}
+var(LL$re74)
+sd(LL$re74)
+install.packages("moments",repos = "http://cran.us.r-project.org")
+library(moments)
+skewness(LL$re74)
+kurtosis(LL$re74)
+sd.re74 <- sqrt(var(LL$re74))
+sd.re74
+```
+
+This section measuares dispersion: variance, standard deviation, skewness, and kurtosis.
+
+# T-test
+
+```{r 04}
+t.test(LL$re74, mu=6059, alternative="less")
+t.test(re78 ~ treated, data=LL, alternative = "less", var.equal=FALSE)
+LL.0 <- subset(LL, treated==0)
+t.test(LL.0$re74, LL.0$re78, alternative = "less", paired = TRUE)
+LL.1 <- subset(LL, treated==1)
+t.test(LL.1$re74, LL.1$re78, alternative = "less", paired = TRUE)
+```
+
+This chunk does the one-sample t-test and two-sample t-test (both independet samples and dependet samples).
+
+# Cross-Tabulations and Correlation
+
+```{r 05}
+install.packages("gmodels",repos = "http://cran.us.r-project.org")
+library(gmodels)
+CrossTable(y=LL$u75, x=LL$treated)
+CrossTable(y=LL$u75, x=LL$treated, prop.c=TRUE,
+prop.r=FALSE, prop.t= FALSE, prop.chisq=FALSE, chisq=TRUE,
+format="SPSS")
+cor(LL$education, LL$re74)
+```
+
+The final section gives a further data exploration of cross-tabluation and correlation.
